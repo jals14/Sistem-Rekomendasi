@@ -55,28 +55,42 @@ ratings.csv
   
 ## Data Preparation
 
-### Deskripsi Fitur
-Pada tahap ini, dilakukan serangkaian teknik persiapan data (data preparation) agar data siap digunakan dalam proses pemodelan sistem rekomendasi. Adapun langkah-langkah yang dilakukan secara berurutan adalah sebagai berikut:
+A. Penjelasan Tahapan
+1. Penghapusan Duplikat:
+  - movies.drop_duplicates(subset=['movieId', 'title'], inplace=True): Baris duplikat berdasarkan kombinasi movieId dan title dihapus dari DataFrame movies.
+  - rating.drop_duplicates(inplace=True): Baris duplikat dihapus dari DataFrame rating.
+Tujuan: Memastikan kebersihan data dan menghindari perhitungan yang tidak akurat karena adanya entri ganda.
 
-1. Menghapus Duplikasi Data
-   - Menghapus duplikasi pada dataset movies berdasarkan kombinasi movieId dan title.
-   - Menghapus seluruh baris duplikat pada dataset ratings.
-2. Memecah Kolom Genre
-   - Kolom genres yang semula berupa string dengan delimiter '|' diubah menjadi list menggunakan fungsi split().
-3. One-Hot Encoding Genre
-   - Menggunakan MultiLabelBinarizer untuk mengubah kolom genre menjadi fitur biner (one-hot encoding) agar bisa digunakan dalam algoritma content-based filtering.
-4. Konversi Timestamp
-   - Mengubah kolom timestamp pada ratings.csv ke dalam format datetime (datetime) untuk analisis waktu.
-   - Menambahkan kolom baru bernama rating_year dari atribut waktu tersebut untuk menganalisis tren tahunan rating film.
-5. Menggabungkan Dataset
-   - Melakukan merge antara dataset movies dan ratings berdasarkan movieId untuk menghasilkan dataframe gabungan yang lebih kaya informasi (movie_rating).
-6. Seleksi dan Pembuatan Fitur
-   - Memilih fitur-fitur yang relevan seperti movieId, title, dan hasil one-hot encoding genre untuk digunakan dalam content-based filtering.
-   - Menyiapkan data userId, movieId, dan rating sebagai input untuk model collaborative filtering.
-7. Normalisasi Rating
-   - Melakukan normalisasi nilai rating ke dalam rentang 0–1 sebelum digunakan dalam pelatihan model neural network.
-8. Pemisahan Data
-   - Dataset dibagi menjadi data pelatihan (x_train, y_train) dan data validasi (x_val, y_val) menggunakan train_test_split.
+2. Pemrosesan Kolom 'genres':
+  - movies['genres'] = movies['genres'].apply(lambda x: x.split('|')): String genre dipecah menjadi list genre untuk setiap film.
+  - mlb = MultiLabelBinarizer() dan genre_matrix = pd.DataFrame(mlb.fit_transform(movies['genres']), columns=mlb.classes_): MultiLabelBinarizer digunakan untuk melakukan one-hot encoding pada kolom genre, mengubah list genre menjadi kolom biner (0 atau 1) untuk setiap kategori genre yang ada.
+  - movies = pd.concat([movies[['movieId', 'title']], genre_matrix], axis=1): Matriks genre yang sudah di-one-hot encode digabungkan kembali dengan kolom movieId dan title dari DataFrame movies.
+Tujuan: Mengubah format genre dari string menjadi representasi numerik biner yang dapat digunakan untuk perhitungan kesamaan pada model Content-Based Filtering.
+
+3. Konversi dan Ekstraksi Timestamp:
+  - rating['datetime'] = pd.to_datetime(rating['timestamp'], unit='s'): Kolom timestamp di DataFrame rating dikonversi menjadi format datetime yang lebih mudah dioperasikan.
+  - rating['rating_year'] = rating['datetime'].dt.year: Kolom baru rating_year ditambahkan, berisi tahun dari kolom datetime.
+  - Tujuan: Memudahkan analisis berbasis waktu dan potensi penggunaan fitur waktu di kemudian hari, meskipun rating_year tidak secara langsung digunakan dalam model rekomendasi yang Anda tampilkan.Penggabungan Dataset movies dan ratings:
+  - movie_rating = pd.merge(rating, movies, on='movieId', how='inner'): DataFrame rating dan movies digabungkan berdasarkan movieId.
+Tujuan: Mengkonsolidasi informasi film dan rating ke dalam satu DataFrame untuk memudahkan analisis dan pembangunan model.
+
+B. Tahapan Data Preparation Terpisah untuk Setiap Pendekatan
+
+1. Data Preparation Umum (untuk kedua pendekatan):
+  - Penghapusan duplikat pada movies dan rating.
+  - Konversi timestamp ke datetime dan ekstraksi rating_year.
+  - Penggabungan rating dan movies menjadi movie_rating.
+
+2. Data Preparation Spesifik untuk Content-Based Filtering:
+  - Pemrosesan kolom genres dengan one-hot encoding menggunakan MultiLabelBinarizer.
+  - Pembuatan movie_features dan genre_matrix yang hanya berfokus pada atribut film (genre) untuk perhitungan cosine_similarity.
+  - Pembuatan user_likes (film yang disukai pengguna) untuk evaluasi Precision@K.
+
+3. Data Preparation Spesifik untuk Collaborative Filtering:
+  - Membuat DataFrame df baru dari rating yang hanya berisi userId, movieId, dan rating.
+  - Mapping user dan movie ke angka: user_to_encoded, movie_to_encoded, dan pembuatan kolom user serta movie terenkripsi.
+  - Normalisasi rating (norm_rating).
+  - Acak dan split data: df.sample(frac=1, random_state=42) dan train_test_split(x, y, test_size=0.2, random_state=42) untuk memisahkan data menjadi set pelatihan dan validasi.
 
 ## Modeling and Result
 

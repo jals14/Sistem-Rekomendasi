@@ -49,6 +49,8 @@ Bagian ini menyajikan gambaran umum tentang dataset yang digunakan dalam proyek 
          - movieId: ID film yang diberi rating, terhubung ke dataset movies.csv.
          - rating: Rating yang diberikan oleh pengguna ke film, pada skala umumnya dari 0.5 hingga 5.0.
          - timestamp: Waktu ketika rating diberikan, direpresentasikan sebagai Unix timestamp.
+  3. Kondisi Awal Data
+      **Missing Values:** Tidak ditemukan missing values pada kolom dalam dataset `movies` dan `ratings`. Artinya, data dapat langsung dianalisis tanpa proses imputasi.
   
 ## Data Preparation
 
@@ -155,7 +157,7 @@ Dalam proyek ini digunakan dua pendekatan sistem rekomendasi, sehingga digunakan
 
 - **RMSE (Collaborative Filtering)**  
   Berdasarkan hasil training dan validasi model, nilai Root Mean Squared Error yang diperoleh adalah:  
-  - **RMSE pada data training: 0.0374**
+  - **RMSE pada data training: 0.01739**
   - **RMSE pada data validasi: 0.1934** 
 
 ### Kesimpulan Evaluasi

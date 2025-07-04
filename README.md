@@ -29,29 +29,26 @@ Tujuan dari proyek ini adalah untuk:
 4. Memberikan insight kepada pengembang atau pengelola platform film digital tentang bagaimana mempersonalisasi pengalaman pengguna melalui sistem rekomendasi.
 
 ## Data Understanding
-### Informasi Umum Data
-Proyek ini menggunakan dua dataset utama, yaitu:
-- movies.csv: berisi informasi mengenai daftar film beserta genre-nya.
-- ratings.csv: berisi data rating film yang diberikan oleh pengguna.
-
-Jumlah data:
-- movies.csv: terdiri dari 9.742 data film.
-- ratings.csv: terdiri dari 100.836 data rating yang diberikan oleh 610 pengguna.
-
-### Sumber Data
-Dataset yang digunakan merupakan bagian dari MovieLens Dataset, yang dapat diakses dan diunduh melalui tautan berikut:
-https://grouplens.org/datasets/movielens/100k/
-
-### Penjelasan Variabel/Fitur
-movies.csv
-- movieId: ID unik dari masing-masing film.
-- title: Judul film, disertai dengan tahun rilis.
-- genres: Genre film yang dipisahkan dengan delimiter |, seperti "Action|Adventure|Animation".
-ratings.csv
-- userId: ID unik dari pengguna.
-- movieId: ID film yang dirating oleh pengguna (berelasi dengan movieId pada movies.csv).
-- rating: Nilai rating yang diberikan (skala 0.5–5.0).
-- timestamp: Waktu rating diberikan dalam format UNIX timestamp (kemudian diubah menjadi kolom datetime dan year untuk analisis lebih lanjut).
+Bagian ini menyajikan gambaran umum tentang dataset yang digunakan dalam proyek sistem rekomendasi ini, merinci asal-usulnya, dimensi, kualitas, dan sifat fitur-fiturnya. Memahami aspek-aspek ini sangat penting untuk pra-pemrosesan data dan pengembangan model yang efektif.
+  1. URL/Tautan Sumber Data 🔗
+     Dataset yang digunakan dalam proyek ini bersumber dari [MovieLens 25M ](https://grouplens.org/datasets/movielens/100k/) Dataset. Secara khusus, kita menggunakan file movies.csv dan ratings.csv, yang masing-masing berisi metadata film dan rating pengguna.
+  2. Jumlah Baris dan Kolom 📏
+     Kita menggunakan dua dataset utama:
+     - movies.csv: Dataset ini berisi informasi tentang film.
+       - Jumlah Baris (sebelum pra-pemrosesan): 9742 baris.
+       - Jumlah Kolom (sebelum pra-pemrosesan): 3 kolom.
+       Penjelasan Kolom:
+         - movieId: Pengidentifikasi unik untuk setiap film.
+         - title: Judul film, termasuk tahun rilisnya.
+         - genres: Daftar genre yang dipisahkan oleh pipa (|) yang terkait dengan film tersebut.
+     - ratings.csv: Dataset ini berisi rating pengguna untuk film.
+       - Jumlah Baris (sebelum pra-pemrosesan): 100836 baris.
+       - Jumlah Kolom (sebelum pra-pemrosesan): 4 kolom.
+       Penjelasan Kolom:
+         - userId: Pengidentifikasi unik untuk setiap pengguna.
+         - movieId: ID film yang diberi rating, terhubung ke dataset movies.csv.
+         - rating: Rating yang diberikan oleh pengguna ke film, pada skala umumnya dari 0.5 hingga 5.0.
+         - timestamp: Waktu ketika rating diberikan, direpresentasikan sebagai Unix timestamp.
   
 ## Data Preparation
 
@@ -123,7 +120,7 @@ Metode ini memanfaatkan rating yang diberikan pengguna untuk mempelajari prefere
 - RMSE training dan validasi menunjukkan performa yang stabil setelah beberapa epoch.
 - Model mampu menghasilkan **Top-10 rekomendasi** film untuk masing-masing pengguna.
 
-**Contoh Output Rekomendasi untuk 1 User:**
+**Contoh Output Rekomendasi untuk User 301:**
 1. Persuasion (1995)  
 2. Shawshank Redemption, The (1994)  
 3. Streetcar Named Desire, A (1951)

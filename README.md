@@ -38,17 +38,11 @@ Jumlah data:
 - movies.csv: terdiri dari 9.742 data film.
 - ratings.csv: terdiri dari 100.836 data rating yang diberikan oleh 610 pengguna.
 
-Kondisi data:
-- Tidak terdapat nilai kosong (missing values) yang signifikan.
-- Dataset telah melalui proses pemeriksaan duplikasi dan pembersihan data seperti:
-    - Menghapus baris duplikat.
-    - Mengubah format timestamp menjadi datetime.
-
 ### Sumber Data
 Dataset yang digunakan merupakan bagian dari MovieLens Dataset, yang dapat diakses dan diunduh melalui tautan berikut:
 https://grouplens.org/datasets/movielens/100k/
 
-## Penjelasan Variabel/Fitur
+### Penjelasan Variabel/Fitur
 movies.csv
 - movieId: ID unik dari masing-masing film.
 - title: Judul film, disertai dengan tahun rilis.
@@ -96,11 +90,11 @@ Metode ini merekomendasikan film berdasarkan kemiripan genre antar film. Langkah
 
 **Contoh Output Top-5 Recommendation:**  
 Untuk film **"Toy Story (1995)"**, sistem merekomendasikan 5 film teratas yang memiliki genre serupa:
-1. A Bug's Life (1998)  
-2. Monsters, Inc. (2001)  
-3. Shrek (2001)  
-4. The Incredibles (2004)  
-5. Finding Nemo (2003)
+1. Toy Story 2  
+2. Monsters, Inc.
+3. Antz
+4. Adventure of Rocky and Bullwinkle, The
+5. Emperor's New Groove, The
 
 ---
 
@@ -116,20 +110,17 @@ Metode ini memanfaatkan rating yang diberikan pengguna untuk mempelajari prefere
 - Model mampu menghasilkan **Top-10 rekomendasi** film untuk masing-masing pengguna.
 
 **Contoh Output Rekomendasi untuk 1 User:**
-1. The Matrix (1999)  
-2. Fight Club (1999)  
-3. The Sixth Sense (1999)  
-4. The Green Mile (1999)  
-5. American Beauty (1999)  
-6. Saving Private Ryan (1998)  
-7. Se7en (1995)  
-8. Forrest Gump (1994)  
-9. Pulp Fiction (1994)  
-10. Good Will Hunting (1997)
+1. Persuasion (1995)  
+2. Shawshank Redemption, The (1994)  
+3. Streetcar Named Desire, A (1951)
+4. Kawrence if Arabia (1962)
+5. Swept Away (Travolti da un insolito destino nell'azzurro mare d'agosto)
+6. Jules and Jim (Jules et Jim (1961)
+7. Lady Eve, The (1941)
+8. Trial, The (1962)
+9. Baby Driver (2017)
+10. Three Billboards Outside Ebbing, Missouri (2017)
 
----
-
-Kedua model ini bekerja secara komplementer: Content-Based Filtering fokus pada karakteristik film, sedangkan Collaborative Filtering fokus pada perilaku pengguna. Implementasi keduanya berhasil memberikan solusi terhadap permasalahan rekomendasi personal yang dihadapi pengguna.
 
 ## Evaluation
 
@@ -138,7 +129,7 @@ Kedua model ini bekerja secara komplementer: Content-Based Filtering fokus pada 
 Dalam proyek ini digunakan dua pendekatan sistem rekomendasi, sehingga digunakan dua metrik evaluasi yang berbeda sesuai konteks masing-masing:
 
 1. **Content-Based Filtering**
-   - **Precision@K**: Metrik ini mengukur proporsi film yang direkomendasikan dalam Top-K yang benar-benar disukai oleh pengguna (berdasarkan histori rating ≥ 4).
+   - **Precision**: Metrik ini mengukur proporsi film yang direkomendasikan dalam Top-K yang benar-benar disukai oleh pengguna (berdasarkan histori rating ≥ 4).
    - Evaluasi dilakukan dengan mengambil sampel 100 pengguna dan menghitung rata-rata nilai Precision@5.
 
 2. **Collaborative Filtering (Deep Learning)**
@@ -149,12 +140,12 @@ Dalam proyek ini digunakan dua pendekatan sistem rekomendasi, sehingga digunakan
 ### Hasil Evaluasi
 
 - **Precision@5 (Content-Based)**  
-  Dari hasil evaluasi terhadap 100 pengguna acak, diperoleh nilai rata-rata **Precision@5 sebesar ±0.45**. Artinya, sekitar 45% dari film yang direkomendasikan benar-benar disukai oleh pengguna, menunjukkan relevansi rekomendasi yang cukup baik berdasarkan genre.
+  diperoleh nilai rata-rata **Precision sebesar 0.0920**. 
 
 - **RMSE (Collaborative Filtering)**  
-  Setelah pelatihan selama beberapa epoch, model menunjukkan **RMSE validasi yang menurun dan stabil**. Hal ini menandakan bahwa model mampu mempelajari preferensi pengguna dengan baik dan memberikan prediksi rating yang cukup akurat.
-
----
+  Berdasarkan hasil training dan validasi model, nilai Root Mean Squared Error yang diperoleh adalah:  
+  - **RMSE pada data training: 0.0374**
+  - **RMSE pada data validasi: 0.1934** 
 
 ### Kesimpulan Evaluasi
 
